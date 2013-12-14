@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block custom_styles %}
+    <link rel="stylesheet" href="/media/vendor/jquery.wysiwyg.css">
+    <style>
+        #screenplay-editor, #screenplay-editor-wysiwyg-iframe {
+            width: 100% !important;
+        }
+
+        .wysiwyg {
+            width: auto !important;
+        }
+    </style>
+{% endblock custom_styles %}
+{% block left_column %}
+    {% include 'screenwriter/left_navigation.html' %}
+{% endblock left_column %}
+{% block right_column %}
+
+    <h3>{{ screenplay.name }}</h3>
+    <textarea id="screenplay-editor">Hello Summernote</textarea>
+
+
+{% endblock right_column %}
+{% block custom_scripts %}
+    <script src="/media/vendor/jquery.wysiwyg.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#screenplay-editor').wysiwyg({
+
+                rmUnusedControls: true,
+                controls: {
+                    sceneHeading: {
+                        visible: true,
+                        exec: function () {
+                            var range = this.getInternalRange(),
+                                    common = range.commonAncestorContainer,
+                                    heading = this.dom.getElement("p");
+
+                            // if a text node is selected, we want to make the wrap the whole element, not just some text
+                            if (common.nodeType === 3) {
+                                if(common.parentNode.nodeName.toLowerCase() !== "body"){
+                                    common = common.parentNode;
+                                }
+
+                            }
+
+                            if (heading && $(heading).hasClass("heading")) {
+                                if(common == heading){
+                                    common = common.firstChild;
+                                }
+                                $(common).unwrap();
+                            }
+                            else {
+                                if ("body" !== common.nodeName.toLowerCase()) {
+                                    $(common).wrap("<p class='heading' />");
+
+                                }
+                            }
+                        },
+                        callback: function (event, Wysiwyg) {
+                            alert("callback triggered!");
+                        },
+                        className: 'Scene Heading'
+                    }
+                }
+            });
+
+        });
+    </script>
+{% endblock custom_scripts %}

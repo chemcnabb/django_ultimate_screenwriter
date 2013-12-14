@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" hash="1615102039">
+    <data-source source="LOCAL" name="Django default" uuid="4b48501b-1acf-4956-9a0d-3bcd7281900e">
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:C:\Users\Che\Documents\Web Development\django_ultimate_screenwriter\ultimate_screenwriter\db.screenwriter</jdbc-url>
+      <libraries />
+    </data-source>
+  </component>
+</project>
+

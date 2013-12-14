@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block custom_styles %}
+    <style>
+    .btn-circle.btn-xl {
+  width: 150px;
+  height: 150px;
+  padding: 10px 16px;
+  font-size: 48px;
+  line-height: 1.33;
+  border-radius: 75px;
+}
+    </style>
+{% endblock custom_styles %}
+{% block content %}
+
+    <div class="container">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li><a class="active">Profile</a></li>
+        </ol>
+
+
+        <ul class="thumbnails list-unstyled">
+
+            {% for screenplay in screenplays %}
+
+
+                <li class="col-md-3">
+                    <div class="thumbnail" style="padding: 0">
+                        <div style="padding:4px">
+                            <img alt="300x200" style="width: 100%" src="http://placehold.it/200x150">
+                        </div>
+                        <div class="caption">
+                            <h2>{{ screenplay.name|capfirst }}</h2>
+
+                            <p>{{ screenplay.description }}</p>
+                        </div>
+                        <div class="modal-footer" style="text-align: left">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                     aria-valuemax="100" style="width: 60%;">
+                                    <span class="sr-only">60% Complete</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <a type="button" href="{{ screenplay.get_absolute_url }}" class="btn btn-default btn-sm btn-block">Continue</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
