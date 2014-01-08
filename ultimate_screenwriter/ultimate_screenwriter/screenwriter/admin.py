@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Screenplay, Act, Sequence, Heading, Character, Scene, Action, Dialogue
+from models import Screenplay, Act, Sequence, Slug, Character, Scene, Action, Dialogue, ScreenplayElements, ScreenplayElementType, Parentheses
 # Register your models here.
 
 
@@ -16,9 +16,9 @@ class SequenceAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Sequence, SequenceAdmin)
 
-class HeadingAdmin(admin.ModelAdmin):
+class SlugAdmin(admin.ModelAdmin):
     pass
-admin.site.register(Heading, HeadingAdmin)
+admin.site.register(Slug, SlugAdmin)
 
 class CharacterAdmin(admin.ModelAdmin):
     pass
@@ -35,3 +35,13 @@ admin.site.register(Action, ActionAdmin)
 class DialogueAdmin(admin.ModelAdmin):
     pass
 admin.site.register(Dialogue, DialogueAdmin)
+
+class ScreenplayElementsAdmin(admin.ModelAdmin):
+    pass
+class ParenthesesAdmin(admin.ModelAdmin):
+    pass
+class ScreenplayElementTypeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(ScreenplayElements, ScreenplayElementsAdmin)
+admin.site.register(Parentheses, ParenthesesAdmin)
+admin.site.register(ScreenplayElementType, ScreenplayElementTypeAdmin)

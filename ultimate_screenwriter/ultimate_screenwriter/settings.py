@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 from os.path import dirname, join
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 PROJECT_DIR = dirname(__file__)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -44,7 +45,11 @@ INSTALLED_APPS = (
     'ultimate_screenwriter.screenwriter',
 
 )
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
+    'ultimate_screenwriter.context_processors.screenwriter_context_processors.screenplay_upload_form',
 
+)
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'ultimate_screenwriter.middleware.screenwriter_middleware.ScreenplayMiddleware',
 )
 
 ROOT_URLCONF = 'ultimate_screenwriter.urls'
@@ -70,9 +76,7 @@ DATABASES = {
 }
 
 
-TEMPLATE_CONTEXT_PROCESSORS = TCP + (
-    'django.core.context_processors.request',
-)
+
 
 
 # Internationalization

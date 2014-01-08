@@ -1,3 +1,5 @@
+
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
@@ -10,40 +12,91 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-{#                <li><a href="#">Home</a></li>#}
-{#                <li><a href="#about">About</a></li>#}
-{#                <li><a href="#contact">Contact</a></li>#}
+                {#                <li><a href="#">Home</a></li>#}
+                {#                <li><a href="#about">About</a></li>#}
+                {#                <li><a href="#contact">Contact</a></li>#}
                 {% if user.is_authenticated %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+
+
+                            <li>
+                                <a href="#" class="new" title="New screenplay...">&nbsp; New</a>
+                            </li>
+
+
+                            <li>
+
+                                <a data-toggle="modal" href="#upload_screenplay" class="load" title="Load a Screenplay...">&nbsp; Load</a>
+                            </li>
+
+
+                            <li>
+                                <a href="#" class="save" title="Save screenplay...">&nbsp; Save</a>
+                            </li>
+
+
+{#                            <li><a href="#">Action</a></li>#}
+{#                            <li><a href="#">Another action</a></li>#}
+{#                            <li><a href="#">Something else here</a></li>#}
+{#                            <li class="divider"></li>#}
+{#                            <li class="dropdown-header">Nav header</li>#}
+{#                            <li><a href="#">Separated link</a></li>#}
+{#                            <li><a href="#">One more separated link</a></li>#}
+                        </ul>
+                    </li>
                 {% endif %}
             </ul>
             <p class="navbar-text navbar-center">{% block screenplay_title %}{% endblock screenplay_title %}</p>
-        {% if not user.is_authenticated %}
-            <form method='post' class="navbar-form navbar-right" action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
-                <div class="form-group">
-                    <input type="text" name="username" placeholder="Username" class="form-control">
-                </div>
-                <div class="form-group">
-                    <input type="password" name="password" placeholder="Password" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-success">Sign in</button>
-            </form>
-        {% else %}
-        <p class="navbar-text navbar-right">Logged in as: <a href="/accounts/profile/">{{ request.user|capfirst }}</a></p>
-        {% endif %}
+            {% if not user.is_authenticated %}
+                <form method='post' class="navbar-form navbar-right"
+                      action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" name="username" placeholder="Username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="password" placeholder="Password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Sign in</button>
+                </form>
+            {% else %}
+                <p class="navbar-text navbar-right">Logged in as: <a
+                        href="/accounts/profile/">{{ request.user|capfirst }}</a></p>
+            {% endif %}
         </div>
 
         <!--/.navbar-collapse -->
     </div>
 </div>
+
+
+<!-- Modal -->
+  <div class="modal fade" id="upload_screenplay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Upload Screenplay</h4>
+        </div>
+        <div class="modal-body">
+            <!-- Upload form. Note enctype attribute! -->
+            <form action="/screenplay/" method="post" id="screenplay-upload-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>{{ screenplay_upload_form.non_field_errors }}</p>
+                <p>{{ screenplay_upload_form.docfile.help_text }}</p>
+                <p>
+                    {{ screenplay_upload_form.docfile.errors }}
+
+                    {{ screenplay_upload_form }}
+                </p>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" onclick='javascript:$("#screenplay-upload-form").submit();' class="btn btn-primary">Save changes</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->

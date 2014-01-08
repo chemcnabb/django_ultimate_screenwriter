@@ -8,149 +8,141 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Screenplay'
-        db.create_table(u'screenwriter_screenplay', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('length', self.gf('django.db.models.fields.IntegerField')(default=120, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'screenwriter', ['Screenplay'])
-
-        # Adding model 'Act'
-        db.create_table(u'screenwriter_act', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('screenplay', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Screenplay'])),
-            ('number', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'screenwriter', ['Act'])
-
-        # Adding model 'Sequence'
-        db.create_table(u'screenwriter_sequence', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('act', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Act'])),
-            ('number', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'screenwriter', ['Sequence'])
-
-        # Adding model 'Heading'
-        db.create_table(u'screenwriter_heading', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-        ))
-        db.send_create_signal(u'screenwriter', ['Heading'])
-
-        # Adding model 'Scene'
-        db.create_table(u'screenwriter_scene', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('sequence', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Sequence'])),
-            ('heading', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Heading'])),
-            ('number', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('action', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
-        ))
-        db.send_create_signal(u'screenwriter', ['Scene'])
-
         # Adding model 'Action'
-        db.create_table(u'screenwriter_action', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('heading', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Heading'])),
+        db.create_table(u'action', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='ActionID')),
+            ('action', self.gf('django.db.models.fields.TextField')(db_column='Action', blank=True)),
         ))
         db.send_create_signal(u'screenwriter', ['Action'])
 
         # Adding model 'Character'
-        db.create_table(u'screenwriter_character', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('scene', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Scene'])),
-            ('heading', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Heading'])),
-            ('order', self.gf('django.db.models.fields.IntegerField')(default=1, null=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+        db.create_table(u'character', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='CharacterID')),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=765, db_column='CharacterName')),
         ))
         db.send_create_signal(u'screenwriter', ['Character'])
 
         # Adding model 'Dialogue'
-        db.create_table(u'screenwriter_dialogue', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('character', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Character'])),
+        db.create_table(u'dialogue', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='DialogueID')),
+            ('dialogue_text', self.gf('django.db.models.fields.TextField')(db_column='DialogueText', blank=True)),
         ))
         db.send_create_signal(u'screenwriter', ['Dialogue'])
 
+        # Adding model 'Parentheses'
+        db.create_table(u'parentheses', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='ParenthesesID')),
+            ('parentheses', self.gf('django.db.models.fields.TextField')(db_column='ParenthesesText', blank=True)),
+        ))
+        db.send_create_signal(u'screenwriter', ['Parentheses'])
+
+        # Adding model 'Screenplay'
+        db.create_table(u'screenplay', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='ScreenplayID')),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=765, db_column='Title', blank=True)),
+            ('author', self.gf('django.db.models.fields.CharField')(max_length=765, db_column='Author', blank=True)),
+            ('date', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, db_column='Date', blank=True)),
+        ))
+        db.send_create_signal(u'screenwriter', ['Screenplay'])
+
+        # Adding model 'Slug'
+        db.create_table(u'slug', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='SlugID')),
+            ('slug', self.gf('django.db.models.fields.TextField')(db_column='Slug', blank=True)),
+        ))
+        db.send_create_signal(u'screenwriter', ['Slug'])
+
+        # Adding model 'ScreenplayElements'
+        db.create_table(u'screenplay_elements', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='ScreenplayElementsID')),
+            ('element_id', self.gf('django.db.models.fields.TextField')(db_column='ElementID', blank=True)),
+            ('element_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.ScreenplayElementType'])),
+            ('parent', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='children', null=True, to=orm['screenwriter.ScreenplayElements'])),
+            ('screenplay', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['screenwriter.Screenplay'])),
+            ('sort_order', self.gf('django.db.models.fields.IntegerField')(db_column='ScreenplaySortOrder')),
+        ))
+        db.send_create_signal(u'screenwriter', ['ScreenplayElements'])
+
+        # Adding model 'ScreenplayElementType'
+        db.create_table(u'screenplay_element_type', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True, db_column='ScreenplayElementTypeID')),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=1000, db_column='ElementType')),
+        ))
+        db.send_create_signal(u'screenwriter', ['ScreenplayElementType'])
+
 
     def backwards(self, orm):
-        # Deleting model 'Screenplay'
-        db.delete_table(u'screenwriter_screenplay')
-
-        # Deleting model 'Act'
-        db.delete_table(u'screenwriter_act')
-
-        # Deleting model 'Sequence'
-        db.delete_table(u'screenwriter_sequence')
-
-        # Deleting model 'Heading'
-        db.delete_table(u'screenwriter_heading')
-
-        # Deleting model 'Scene'
-        db.delete_table(u'screenwriter_scene')
-
         # Deleting model 'Action'
-        db.delete_table(u'screenwriter_action')
+        db.delete_table(u'action')
 
         # Deleting model 'Character'
-        db.delete_table(u'screenwriter_character')
+        db.delete_table(u'character')
 
         # Deleting model 'Dialogue'
-        db.delete_table(u'screenwriter_dialogue')
+        db.delete_table(u'dialogue')
+
+        # Deleting model 'Parentheses'
+        db.delete_table(u'parentheses')
+
+        # Deleting model 'Screenplay'
+        db.delete_table(u'screenplay')
+
+        # Deleting model 'Slug'
+        db.delete_table(u'slug')
+
+        # Deleting model 'ScreenplayElements'
+        db.delete_table(u'screenplay_elements')
+
+        # Deleting model 'ScreenplayElementType'
+        db.delete_table(u'screenplay_element_type')
 
 
     models = {
-        u'screenwriter.act': {
-            'Meta': {'object_name': 'Act'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'number': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'screenplay': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Screenplay']"})
-        },
         u'screenwriter.action': {
-            'Meta': {'object_name': 'Action'},
-            'heading': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Heading']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'Meta': {'object_name': 'Action', 'db_table': "u'action'"},
+            'action': ('django.db.models.fields.TextField', [], {'db_column': "'Action'", 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'ActionID'"})
         },
         u'screenwriter.character': {
-            'Meta': {'object_name': 'Character'},
-            'heading': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Heading']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'order': ('django.db.models.fields.IntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
-            'scene': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Scene']"})
+            'Meta': {'object_name': 'Character', 'db_table': "u'character'"},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'CharacterID'"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '765', 'db_column': "'CharacterName'"})
         },
         u'screenwriter.dialogue': {
-            'Meta': {'object_name': 'Dialogue'},
-            'character': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Character']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'Meta': {'object_name': 'Dialogue', 'db_table': "u'dialogue'"},
+            'dialogue_text': ('django.db.models.fields.TextField', [], {'db_column': "'DialogueText'", 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'DialogueID'"})
         },
-        u'screenwriter.heading': {
-            'Meta': {'object_name': 'Heading'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
-        },
-        u'screenwriter.scene': {
-            'Meta': {'object_name': 'Scene'},
-            'action': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'heading': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Heading']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'number': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'sequence': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Sequence']"})
+        u'screenwriter.parentheses': {
+            'Meta': {'object_name': 'Parentheses', 'db_table': "u'parentheses'"},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'ParenthesesID'"}),
+            'parentheses': ('django.db.models.fields.TextField', [], {'db_column': "'ParenthesesText'", 'blank': 'True'})
         },
         u'screenwriter.screenplay': {
-            'Meta': {'object_name': 'Screenplay'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'length': ('django.db.models.fields.IntegerField', [], {'default': '120', 'null': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'})
+            'Meta': {'object_name': 'Screenplay', 'db_table': "u'screenplay'"},
+            'author': ('django.db.models.fields.CharField', [], {'max_length': '765', 'db_column': "'Author'", 'blank': 'True'}),
+            'date': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'db_column': "'Date'", 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'ScreenplayID'"}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '765', 'db_column': "'Title'", 'blank': 'True'})
         },
-        u'screenwriter.sequence': {
-            'Meta': {'object_name': 'Sequence'},
-            'act': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Act']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'number': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
+        u'screenwriter.screenplayelements': {
+            'Meta': {'object_name': 'ScreenplayElements', 'db_table': "u'screenplay_elements'"},
+            'element_id': ('django.db.models.fields.TextField', [], {'db_column': "'ElementID'", 'blank': 'True'}),
+            'element_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.ScreenplayElementType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'ScreenplayElementsID'"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['screenwriter.ScreenplayElements']"}),
+            'screenplay': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['screenwriter.Screenplay']"}),
+            'sort_order': ('django.db.models.fields.IntegerField', [], {'db_column': "'ScreenplaySortOrder'"})
+        },
+        u'screenwriter.screenplayelementtype': {
+            'Meta': {'object_name': 'ScreenplayElementType', 'db_table': "u'screenplay_element_type'"},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'ScreenplayElementTypeID'"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'db_column': "'ElementType'"})
+        },
+        u'screenwriter.slug': {
+            'Meta': {'object_name': 'Slug', 'db_table': "u'slug'"},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True', 'db_column': "'SlugID'"}),
+            'slug': ('django.db.models.fields.TextField', [], {'db_column': "'Slug'", 'blank': 'True'})
         }
     }
 

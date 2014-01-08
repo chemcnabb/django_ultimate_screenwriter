@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^screenplay/$', ScreenwriterView.as_view()),
     url(r'^screenplay/(?P<screenplay_slug>[-\w]+)/$', ScreenwriterView.as_view()),
 
+
     # url(r'^blog/', include('blog.urls')),
     #url(r'^accounts/', include('registration.backends.default.urls')),
     (r'^accounts/login/$', 'django.contrib.auth.views.login'),

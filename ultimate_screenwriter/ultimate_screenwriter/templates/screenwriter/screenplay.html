@@ -1,70 +1,176 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% block custom_styles %}
-    <link rel="stylesheet" href="/media/vendor/jquery.wysiwyg.css">
-    <style>
-        #screenplay-editor, #screenplay-editor-wysiwyg-iframe {
-            width: 100% !important;
-        }
 
-        .wysiwyg {
-            width: auto !important;
+
+    <link rel="stylesheet" type="text/css" href="/media/vendor/jHtmlArea.css">
+    <style>
+        textarea {
+            height: 100%;
+            min-height: 550px;
+            width: 100%;
         }
     </style>
-{% endblock custom_styles %}
-{% block left_column %}
-    {% include 'screenwriter/left_navigation.html' %}
-{% endblock left_column %}
-{% block right_column %}
 
-    <h3>{{ screenplay.name }}</h3>
-    <textarea id="screenplay-editor">Hello Summernote</textarea>
+
+{% endblock custom_styles %}
+
+{% block right_column %}
+    <textarea id="screenplay-editor">{% autoescape off %}{{ screenplay }}{% endautoescape %}</textarea>
 
 
 {% endblock right_column %}
+
 {% block custom_scripts %}
-    <script src="/media/vendor/jquery.wysiwyg.js"></script>
-    <script>
+    <script type="text/javascript" src="/media/vendor/jHtmlArea-0.7.5.js"></script>
+    <script type="text/javascript">
+
+        var EDIT_MODE = "action";
+        var iFrame = $(".jHtmlArea > div > iframe");
+        var screenplay_editor = $("#screenplay-editor");
+        //var screenplay_container = $("#screenplay-container");
+        var jHtmlArea = $(".jHtmlArea");
+
         $(document).ready(function () {
-            $('#screenplay-editor').wysiwyg({
 
-                rmUnusedControls: true,
-                controls: {
-                    sceneHeading: {
-                        visible: true,
-                        exec: function () {
-                            var range = this.getInternalRange(),
-                                    common = range.commonAncestorContainer,
-                                    heading = this.dom.getElement("p");
+            //screenplay_editor.height(screenplay_container.height() - 29);
 
-                            // if a text node is selected, we want to make the wrap the whole element, not just some text
-                            if (common.nodeType === 3) {
-                                if(common.parentNode.nodeName.toLowerCase() !== "body"){
-                                    common = common.parentNode;
-                                }
+            screenplay_editor.htmlarea({
+
+                css: '/media/css/screenplay-editor.css',
+                toolbar: [
+                    [
+                        {
+                            css: "scene-heading",
+                            text: "Scene Heading",
+                            action: function (btn) {
+                                EDIT_MODE = scriptFormat("heading", this);
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            css: "scene-action",
+                            text: "Action",
+                            action: function (btn) {
+                                EDIT_MODE = scriptFormat("action", this);
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            css: "character",
+                            text: "Character",
+                            action: function (btn) {
+                                EDIT_MODE = scriptFormat("character", this);
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            css: "dialogue",
+                            text: "Dialogue",
+                            action: function (btn) {
+                                EDIT_MODE = scriptFormat("dialogue", this);
+                            }
+                        }
+                    ],
+                    [
+                        {
+                            css: "parentheses",
+                            text: "Parenthetical",
+                            action: function (btn) {
+                                EDIT_MODE = scriptFormat("parentheses", this);
+                            }
+                        }
+                    ]
+
+
+                ],
+                loaded: function () {
+                    var keys = {};
+                    $.myControl = { jhtmlarea: this };
+                    $($.myControl.jhtmlarea.editor.body).keydown(function (e) {
+                        // capture key press
+
+
+                        if (e.which === 49 && e.altKey) {
+                            // ALT + 1
+                            EDIT_MODE = scriptFormat("heading", $.myControl.jhtmlarea.editor);
+                        }
+                        if (e.which === 50 && e.altKey) {
+                            // ALT + 2
+                            EDIT_MODE = scriptFormat("action", $.myControl.jhtmlarea.editor);
+                        }
+                        if (e.which === 51 && e.altKey) {
+                            // ALT + 3
+                            EDIT_MODE = scriptFormat("character", $.myControl.jhtmlarea.editor);
+                        }
+
+                        if (e.which === 52 && e.altKey) {
+                            // ALT + 4
+                            EDIT_MODE = scriptFormat("dialogue", $.myControl.jhtmlarea.editor);
+                        }
+                        if (e.which === 53 && e.altKey) {
+                            // ALT + 5
+                            EDIT_MODE = scriptFormat("parentheses", $.myControl.jhtmlarea.editor);
+                        }
+
+
+                        if (e.keyCode == 9) {//TAB KEY
+                            e.preventDefault();
+                            switch (EDIT_MODE) {
+                                case "heading":
+                                    EDIT_MODE = scriptFormat("action", $.myControl.jhtmlarea.editor);
+                                    break;
+                                case "action":
+                                    EDIT_MODE = scriptFormat("character", $.myControl.jhtmlarea.editor);
+                                    break;
+                                case "character":
+                                    EDIT_MODE = scriptFormat("parentheses", $.myControl.jhtmlarea.editor);
+                                    break;
+                                case "parentheses":
+                                    EDIT_MODE = scriptFormat("dialogue", $.myControl.jhtmlarea.editor);
+                                    break;
+                                case "dialogue":
+                                    EDIT_MODE = scriptFormat("heading", $.myControl.jhtmlarea.editor);
+                                    break;
 
                             }
+                        }
+                    });
+                    $($.myControl.jhtmlarea.editor.body).keyup(function (e) {
+                        // capture key release
+                        //console.log(EDIT_MODE);
+                        if (e.keyCode == 13) {//ENTER KEY
+                            if (EDIT_MODE == "heading") {
+                                // iterate through object list
 
-                            if (heading && $(heading).hasClass("heading")) {
-                                if(common == heading){
-                                    common = common.firstChild;
-                                }
-                                $(common).unwrap();
+                                // save heading as heading object
+                                // make heading object global to append children to
                             }
-                            else {
-                                if ("body" !== common.nodeName.toLowerCase()) {
-                                    $(common).wrap("<p class='heading' />");
+                            if (EDIT_MODE == "character") {// goto dialogue
+                                // save character, append to heading object
+                                EDIT_MODE = scriptFormat("dialogue", $.myControl.jhtmlarea.editor);
+                            }
+                            if (EDIT_MODE == "parenthetical") {// goto dialogue
+                                // create parenthetical object and append to dialogue
+                                EDIT_MODE = scriptFormat("dialogue", $.myControl.jhtmlarea.editor);
+                            }
+                            if (EDIT_MODE == "dialogue") {// goto character
+                                // create dialogue, append parentheses
+                                EDIT_MODE = scriptFormat("dialogue", $.myControl.jhtmlarea.editor);
+                            }
+                        }
 
-                                }
-                            }
-                        },
-                        callback: function (event, Wysiwyg) {
-                            alert("callback triggered!");
-                        },
-                        className: 'Scene Heading'
-                    }
+                    });
+
                 }
+
             });
 
+
         });
+
+
     </script>
 {% endblock custom_scripts %}

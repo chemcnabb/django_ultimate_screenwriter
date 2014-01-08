@@ -1,10 +1,61 @@
-
-
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
 
+ul.dropdown-menu li a {
+    display: block;
 
+    /*background-size: auto 42px;*/
+}
+
+ul.dropdown-menu li a.save {
+
+    background: url("/media/img/icons/save.png") no-repeat;
+    background-size: 16px 16px;
+    background-position: 3px 5px;
+}
+
+ul.dropdown-menu li a.load {
+
+    background: url(/media/img/icons/open.png) no-repeat;
+    background-size: 16px 16px;
+    background-position: 3px 5px;
+}
+
+ul.dropdown-menu li a.new {
+
+    background: url(/media/img/icons/new.png) no-repeat;
+    background-size: 16px 16px;
+    background-position: 3px 5px;
+}
+
+a.scene-heading {
+    background: url(/media/img/icons/clapboard.png) no-repeat;
+    background-size: 16px 16px;
+    /*background-position: 3px 5px;*/
+}
+
+a.scene-action {
+    background: url(/media/img/icons/action.punch.png) no-repeat;
+    background-size: 16px 16px;
+    /*background-position: 3px 5px;*/
+}
+
+a.character {
+    background: url(/media/img/icons/character.png) no-repeat;
+    background-size: 16px 16px;
+    /*background-position: 3px 5px;*/
+}
+a.dialogue {
+    background: url(/media/img/icons/dialogue.png) no-repeat;
+    background-size: 16px 16px;
+    /*background-position: 3px 5px;*/
+}
+a.parentheses {
+    background: url(/media/img/icons/parenthesis.png) no-repeat;
+    background-size: 16px 16px;
+    /*background-position: 3px 5px;*/
+}
 
 
 
